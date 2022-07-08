@@ -18,6 +18,7 @@ stages:
     steps:
     - bash: echo "Do the build"
 - stage: DevDeploy
+  dependsOn: Build
   jobs:
   - deployment: DevDeployJob
     environment: Dev
@@ -27,6 +28,7 @@ stages:
           steps:
           - script: echo deploy to Dev
 - stage: QADeploy
+  dependsOn: Build
   jobs:
   - deployment: QADeployJob
     environment: QA
@@ -35,3 +37,13 @@ stages:
         deploy:
           steps:
           - script: echo deploy to QA
+- stage: ProdDeploy
+  dependsOn: Build
+  jobs:
+  - deployment: ProdDeployJob
+    environment: Prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo deploy to Prod
