@@ -18,36 +18,42 @@ stages:
     steps:
     - bash: echo "Do the build"
     - bash: echo $(PipelineLevelVariable)
+    - bash: echo $(Build.BuildNumber)
+    - bash: echo $(Build.BuildID)
+    - bash: echo $(Build.SourceBranchName)
+    - bash: ls -R echo $(Build.SourcesDirectory)
+    - bash: ls -R echo $(System.DefaultWorkingDirectory)
+    - bash: echo $(Build.ArtifactStagingDirectory)
 
-- stage: DevDeploy
-  dependsOn: Build
-  jobs:
-  - deployment: DevDeployJob
-    environment: Dev
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - script: echo deploy to Dev
+# - stage: DevDeploy
+#   dependsOn: Build
+#   jobs:
+#   - deployment: DevDeployJob
+#     environment: Dev
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - script: echo deploy to Dev
 
-- stage: QADeploy
-  dependsOn: Build
-  jobs:
-  - deployment: QADeployJob
-    environment: QA
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - script: echo deploy to QA
+# - stage: QADeploy
+#   dependsOn: Build
+#   jobs:
+#   - deployment: QADeployJob
+#     environment: QA
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - script: echo deploy to QA
 
-- stage: ProdDeploy
-  dependsOn: Build
-  jobs:
-  - deployment: ProdDeployJob
-    environment: Prod
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - script: echo deploy to Prod
+# - stage: ProdDeploy
+#   dependsOn: Build
+#   jobs:
+#   - deployment: ProdDeployJob
+#     environment: Prod
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - script: echo deploy to Prod
