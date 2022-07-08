@@ -21,8 +21,8 @@ stages:
     - bash: echo $(Build.BuildNumber)
     - bash: echo $(Build.BuildID)
     - bash: echo $(Build.SourceBranchName)
-    - bash: ls -R echo $(Build.SourcesDirectory)
-    - bash: ls -R echo $(System.DefaultWorkingDirectory)
+    - bash: echo $(Build.SourcesDirectory)
+    - bash: echo $(System.DefaultWorkingDirectory)
     - bash: echo $(Build.ArtifactStagingDirectory)
 
 # - stage: DevDeploy
