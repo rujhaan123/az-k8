@@ -1,45 +1,64 @@
 trigger:
 - master
 
-# strategy:
-#   matrix:
-#     linux:
-#       operatingSystem: 'ubuntu-latest'
-#     mac:
-#       operatingSystem: 'macos-latest'
-
 pool:
   vmImage: 'ubuntu-latest'
 
-stages:
-- stage: Build
-  jobs:
-  - job: BuildJob
-    steps:
-    - bash: echo "Do the build"
-    - bash: echo $(PipelineLevelVariable)
-    - bash: echo $(Build.BuildNumber)
-    - bash: echo $(Build.BuildID)
-    - bash: echo $(Build.SourceBranchName)
-    - bash: echo $(Build.SourcesDirectory)
-    - bash: echo $(System.DefaultWorkingDirectory)
-    - bash: echo $(Build.ArtifactStagingDirectory)
-    - bash: java --version
-    - bash: python --version
-    - bash: ls -R $(Build.ArtifactStagingDirectory)
-    - task: CopyFiles@2
-      inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: |
-          **/*.yaml
-          **/*.tf
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    - bash: ls -R $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
+steps:
+- script: echo Hello!
+  displayName: 'Running intro'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'aws'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/aws/kubernetes'
+    backendServiceAWS: 'rbaws'
+    backendAWSBucketName: 'rbk8'
+    backendAWSKey: 'kubernetes-dev.tfstate'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# stages:
+# - stage: Build
+#   jobs:
+#   - job: BuildJob
+#     steps:
+#     - bash: echo "Do the build"
+#     - bash: echo $(PipelineLevelVariable)
+#     - bash: echo $(Build.BuildNumber)
+#     - bash: echo $(Build.BuildID)
+#     - bash: echo $(Build.SourceBranchName)
+#     - bash: echo $(Build.SourcesDirectory)
+#     - bash: echo $(System.DefaultWorkingDirectory)
+#     - bash: echo $(Build.ArtifactStagingDirectory)
+#     - bash: java --version
+#     - bash: python --version
+#     - bash: ls -R $(Build.ArtifactStagingDirectory)
+#     - task: CopyFiles@2
+#       inputs:
+#         SourceFolder: '$(System.DefaultWorkingDirectory)'
+#         Contents: |
+#           **/*.yaml
+#           **/*.tf
+#         TargetFolder: '$(Build.ArtifactStagingDirectory)'
+#     - bash: ls -R $(Build.ArtifactStagingDirectory)
+#     - task: PublishBuildArtifacts@1
+#       inputs:
+#         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#         ArtifactName: 'drop'
+#         publishLocation: 'Container'
 
 
 # - stage: DevDeploy
